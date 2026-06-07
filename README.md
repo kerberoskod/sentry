@@ -11,7 +11,12 @@
 go install github.com/kerberoskod/sentry@latest
 ```
 
-Or download a prebuilt binary from [releases](https://github.com/kerberoskod/sentry/releases).
+Or build from source:
+
+```bash
+git clone https://github.com/kerberoskod/sentry.git
+cd sentry && go build -o sentry .
+```
 
 ## Usage
 
