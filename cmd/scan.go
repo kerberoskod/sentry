@@ -17,11 +17,19 @@ var scanCmd = &cobra.Command{
 		path, _ := cmd.Flags().GetString("path")
 		useJSON, _ := cmd.Flags().GetBool("json")
 		strict, _ := cmd.Flags().GetBool("strict")
+		report, _ := cmd.Flags().GetString("report")
 
 		s := scanner.New()
 		findings, err := s.Scan(path)
 		if err != nil {
 			return fmt.Errorf("scan failed: %w", err)
+		}
+
+		if report != "" {
+			if err := output.PrintHTML(findings, report); err != nil {
+				return fmt.Errorf("failed to write report: %w", err)
+			}
+			fmt.Printf("HTML report written to %s\n", report)
 		}
 
 		if useJSON {
@@ -63,4 +71,5 @@ var scanCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(scanCmd)
+	scanCmd.Flags().String("report", "", "Write HTML report to file")
 }

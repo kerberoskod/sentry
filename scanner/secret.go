@@ -26,6 +26,16 @@ var secretPatterns = []struct {
 	{regexp.MustCompile(`(?i)(?:api[_-]?key|apikey)\s*[:=]\s*['"][a-zA-Z0-9_-]{16,}['"]`), SeverityHigh, "api-key"},
 	{regexp.MustCompile(`(?i)(?:secret|token|password)\s*[:=]\s*['"][a-zA-Z0-9!@#$%^&*()_+=\-{}[\]|;:',.<>?]{8,}['"]`), SeverityHigh, "credential"},
 	{regexp.MustCompile(`(?i)JFrog|jfrog\.io|artifactory`), SeverityMedium, "internal"},
+	{regexp.MustCompile(`GOOGLE_APPLICATION_CREDENTIALS|AIza[0-9A-Za-z_-]{35}`), SeverityCritical, "gcp"},
+	{regexp.MustCompile(`(?i)-----BEGIN\s+CERTIFICATE-----`), SeverityHigh, "certificate"},
+	{regexp.MustCompile(`(?i)-----BEGIN\s+PGP\s+PRIVATE\s+KEY\s+BLOCK-----`), SeverityCritical, "pgp-key"},
+	{regexp.MustCompile(`ssh-rsa\s+AAAA|ssh-ed25519\s+AAA|ssh-dss\s+AAA`), SeverityHigh, "ssh-key"},
+	{regexp.MustCompile(`xox[baprs]-[0-9a-z-]{10,}`), SeverityCritical, "slack-token"},
+	{regexp.MustCompile(`(?i)AC[a-z0-9_-]{32}`), SeverityCritical, "twilio-account"},
+	{regexp.MustCompile(`(?i)SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}`), SeverityCritical, "sendgrid-key"},
+	{regexp.MustCompile(`(?i)heroku[a-z0-9_-]{32}`), SeverityCritical, "heroku-api"},
+	{regexp.MustCompile(`(?:jdbc|mysql|postgres)://[a-zA-Z0-9]+:[a-zA-Z0-9]+@`), SeverityHigh, "database-url"},
+	{regexp.MustCompile(`eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}`), SeverityMedium, "jwt"},
 }
 
 var excludeDirs = map[string]bool{
