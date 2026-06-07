@@ -1,8 +1,10 @@
 package scanner
 
 import (
+	"bufio"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type EnvCheck struct{}
@@ -52,28 +54,12 @@ func (e *EnvCheck) Run(root string) ([]Finding, error) {
 }
 
 func containsLine(content, substr string) bool {
-	start := 0
-	for {
-		idx := indexOf(content, substr, start)
-		if idx == -1 {
-			return false
-		}
-		if (idx == 0 || content[idx-1] == '\n') &&
-			(idx+len(substr) >= len(content) || content[idx+len(substr)] == '\n' || content[idx+len(substr)] == '\r' || content[idx+len(substr)] == '=') {
+	scanner := bufio.NewScanner(strings.NewReader(content))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if line == substr || strings.HasPrefix(line, substr+"=") {
 			return true
 		}
-		start = idx + 1
 	}
-}
-
-func indexOf(s, substr string, start int) int {
-	if start >= len(s) {
-		return -1
-	}
-	for i := start; i <= len(s)-len(substr); i++ {
-		if s[i:i+len(substr)] == substr {
-			return i
-		}
-	}
-	return -1
+	return false
 }

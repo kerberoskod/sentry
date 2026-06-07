@@ -47,7 +47,7 @@ func (d *DockerfileCheck) Run(root string) ([]Finding, error) {
 				})
 			}
 
-			if strings.HasPrefix(upper, "ADD ") && !strings.HasPrefix(upper, "ADD .") {
+			if strings.HasPrefix(upper, "ADD ") {
 				findings = append(findings, Finding{
 					Severity:    SeverityLow,
 					Title:       "Using ADD instead of COPY",
@@ -70,6 +70,9 @@ func (d *DockerfileCheck) Run(root string) ([]Finding, error) {
 					Suggestion:  "Pin a specific version tag instead of 'latest'.",
 				})
 			}
+		}
+		if err := scanner.Err(); err != nil {
+			os.Stderr.WriteString("warning: error reading " + p + ": " + err.Error() + "\n")
 		}
 		f.Close()
 	}

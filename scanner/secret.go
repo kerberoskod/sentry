@@ -47,6 +47,7 @@ func (s *SecretCheck) Run(root string) ([]Finding, error) {
 
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "warning: error accessing %s: %v\n", path, err)
 			return nil
 		}
 		if info.IsDir() && excludeDirs[info.Name()] {
@@ -79,8 +80,7 @@ func (s *SecretCheck) Run(root string) ([]Finding, error) {
 			line := scanner.Text()
 
 			for _, p := range secretPatterns {
-				matches := p.regex.FindStringSubmatchIndex(line)
-				if matches != nil {
+				if p.regex.MatchString(line) {
 					findings = append(findings, Finding{
 						Severity:    p.severity,
 						Title:       fmt.Sprintf("Potential %s secret found", p.category),
@@ -92,6 +92,9 @@ func (s *SecretCheck) Run(root string) ([]Finding, error) {
 					})
 				}
 			}
+		}
+		if err := scanner.Err(); err != nil {
+			fmt.Fprintf(os.Stderr, "warning: error reading %s: %v\n", path, err)
 		}
 		f.Close()
 		return nil
