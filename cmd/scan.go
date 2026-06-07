@@ -29,7 +29,7 @@ var scanCmd = &cobra.Command{
 			if err := output.PrintHTML(findings, report); err != nil {
 				return fmt.Errorf("failed to write report: %w", err)
 			}
-			fmt.Printf("HTML report written to %s\n", report)
+			fmt.Fprintf(os.Stderr, "HTML report written to %s\n", report)
 		}
 
 		if useJSON {

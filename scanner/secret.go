@@ -99,4 +99,3 @@ func (s *SecretCheck) Run(root string) ([]Finding, error) {
 
 	return findings, err
 }
-

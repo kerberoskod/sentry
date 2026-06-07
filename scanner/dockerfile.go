@@ -25,7 +25,6 @@ func (d *DockerfileCheck) Run(root string) ([]Finding, error) {
 		if err != nil {
 			continue
 		}
-		defer f.Close()
 
 		rel, _ := filepath.Rel(root, p)
 		lineNum := 0
@@ -36,7 +35,7 @@ func (d *DockerfileCheck) Run(root string) ([]Finding, error) {
 			line := strings.TrimSpace(scanner.Text())
 			upper := strings.ToUpper(line)
 
-			if strings.HasPrefix(upper, "USER ROOT") || line == "USER 0" {
+			if strings.HasPrefix(upper, "USER ROOT") || upper == "USER 0" || strings.HasPrefix(upper, "USER 0 ") {
 				findings = append(findings, Finding{
 					Severity:    SeverityHigh,
 					Title:       "Container runs as root",
@@ -49,7 +48,6 @@ func (d *DockerfileCheck) Run(root string) ([]Finding, error) {
 			}
 
 			if strings.HasPrefix(upper, "ADD ") && !strings.HasPrefix(upper, "ADD .") {
-				// Using ADD instead of COPY is generally discouraged
 				findings = append(findings, Finding{
 					Severity:    SeverityLow,
 					Title:       "Using ADD instead of COPY",
@@ -61,7 +59,7 @@ func (d *DockerfileCheck) Run(root string) ([]Finding, error) {
 				})
 			}
 
-			if strings.Contains(upper, "LATEST") {
+			if strings.HasPrefix(upper, "FROM ") && strings.Contains(upper, ":LATEST") {
 				findings = append(findings, Finding{
 					Severity:    SeverityMedium,
 					Title:       "Using 'latest' tag",
@@ -73,6 +71,7 @@ func (d *DockerfileCheck) Run(root string) ([]Finding, error) {
 				})
 			}
 		}
+		f.Close()
 	}
 
 	return findings, nil
