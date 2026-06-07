@@ -8,14 +8,16 @@
 ## Installation
 
 ```bash
-go install github.com/kerberoskod/sentry@latest
+# Ensure you have Go 1.23+
+go install github.com/kerberoskod/sentry@main
 ```
 
 Or build from source:
 
 ```bash
 git clone https://github.com/kerberoskod/sentry.git
-cd sentry && go build -o sentry .
+cd sentry
+go build -o sentry .
 ```
 
 ## Usage
@@ -47,6 +49,12 @@ sentry scan --strict
 | **Docker** | Using `ADD` instead of `COPY` | ⚪ Low |
 | **.gitignore** | Missing `.gitignore` file | 🔵 Medium |
 | **.gitignore** | Missing recommended entries (`.env`, `node_modules/`, etc.) | varies |
+
+## Testing
+
+```bash
+go test ./... -v -count=1
+```
 
 ## License
 
