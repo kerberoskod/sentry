@@ -2,6 +2,8 @@
 
 ![Go](https://img.shields.io/badge/Go-1.23-00ADD8?logo=go&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
+[![CI](https://github.com/kerberoskod/sentry/actions/workflows/ci.yml/badge.svg)](https://github.com/kerberoskod/sentry/actions/workflows/ci.yml)
+[![Release](https://github.com/kerberoskod/sentry/actions/workflows/release.yml/badge.svg)](https://github.com/kerberoskod/sentry/actions/workflows/release.yml)
 
 **Sentry** scans your project for hardcoded secrets, misconfigurations, and security issues — right from the terminal.
 
