@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
 )
 
 type SecretCheck struct{}
@@ -69,7 +68,6 @@ func (s *SecretCheck) Run(root string) ([]Finding, error) {
 		if err != nil {
 			return nil
 		}
-		defer f.Close()
 
 		rel, _ := filepath.Rel(root, path)
 		lineNum := 0
@@ -95,18 +93,10 @@ func (s *SecretCheck) Run(root string) ([]Finding, error) {
 				}
 			}
 		}
+		f.Close()
 		return nil
 	})
 
 	return findings, err
 }
 
-func isSecretLine(line string) bool {
-	lower := strings.ToLower(line)
-	for _, kw := range []string{"password", "secret", "token", "api_key", "apikey", "private_key"} {
-		if strings.Contains(lower, kw) {
-			return true
-		}
-	}
-	return false
-}
