@@ -1,6 +1,7 @@
 # Sentry — Security Scanner
 
 ![Go](https://img.shields.io/badge/Go-1.23-00ADD8?logo=go&logoColor=white)
+![Tests](https://img.shields.io/badge/6_tests-passing-228B22?style=flat)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 **Sentry** scans your project for hardcoded secrets, misconfigurations, and security issues — right from the terminal.
